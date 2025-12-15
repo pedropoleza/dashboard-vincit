@@ -4,13 +4,13 @@ import React from 'react';
 import { Advisor } from './types';
 import { clsx } from 'clsx';
 import { Trophy } from 'lucide-react';
+import { Avatar } from '@/components/ui/Avatar';
 
 interface AdvisorLeaderboardProps {
     advisors: Advisor[];
 }
 
 export function AdvisorLeaderboard({ advisors }: AdvisorLeaderboardProps) {
-    // Sort by DSC contribution by default? Or Meetings?
     const sorted = [...advisors].sort((a, b) => b.meetingsCompleted - a.meetingsCompleted);
 
     return (
@@ -49,7 +49,12 @@ export function AdvisorLeaderboard({ advisors }: AdvisorLeaderboardProps) {
                                         {idx + 1}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 font-medium text-white">{adv.name}</td>
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center gap-3">
+                                        <Avatar name={adv.name} size="sm" />
+                                        <span className="font-medium text-white">{adv.name}</span>
+                                    </div>
+                                </td>
                                 <td className="px-6 py-4 text-right text-zinc-200">{adv.meetingsCompleted}</td>
                                 <td className="px-6 py-4 text-right">
                                     <span className={clsx(

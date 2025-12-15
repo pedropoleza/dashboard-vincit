@@ -4,6 +4,7 @@ import { verifyWebhook } from '@/lib/auth';
 import { normalizePayload } from '@/lib/normalize';
 import { generateDedupeKey } from '@/lib/utils';
 import { processOpportunityEvent } from '@/lib/processors/opportunity';
+import { enrichOpportunityEvent } from '@/lib/enrichment';
 
 export async function POST(req: NextRequest) {
     try {
@@ -54,7 +55,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Database Error' }, { status: 500 });
         }
 
-        // 4. Process (Ruling)
+        // 4. Enrich (Fetch related data from GHL API)
+        if (event.event_type.startsWith('Opportunity')) {
+            await enrichOpportunityEvent(event);
+        }
+
+        // 5. Process (Ruling)
         console.log(`[Processing] ${event.event_type} for ${event.entity_id}`);
 
         if (event.event_type.startsWith('Opportunity')) {
