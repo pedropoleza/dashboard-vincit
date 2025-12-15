@@ -3,7 +3,7 @@
 import React from 'react';
 import { Advisor } from './types';
 import { clsx } from 'clsx';
-import { Trophy } from 'lucide-react';
+import { Trophy, Award } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 
 interface AdvisorLeaderboardProps {
@@ -14,57 +14,68 @@ export function AdvisorLeaderboard({ advisors }: AdvisorLeaderboardProps) {
     const sorted = [...advisors].sort((a, b) => b.meetingsCompleted - a.meetingsCompleted);
 
     return (
-        <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
-            <div className="p-6 border-b border-zinc-800 flex justify-between items-center">
-                <h3 className="text-white font-medium flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-yellow-500" />
-                    Advisor Leaderboard
-                </h3>
-                <span className="text-xs text-zinc-500">Sorted by Meetings Completed</span>
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-amber-50 to-yellow-50">
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-white rounded-xl border border-amber-200 shadow-sm">
+                            <Trophy className="w-5 h-5 text-amber-600" />
+                        </div>
+                        <h3 className="text-slate-900 font-semibold text-lg">Advisor Leaderboard</h3>
+                    </div>
+                    <span className="text-xs text-slate-500 bg-white px-3 py-1.5 rounded-full font-medium border border-slate-200">
+                        Sorted by Meetings Completed
+                    </span>
+                </div>
             </div>
 
             <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm text-zinc-400">
-                    <thead className="bg-zinc-950/50 uppercase text-xs font-medium tracking-wider">
+                <table className="w-full text-left text-sm">
+                    <thead className="bg-slate-50 border-b border-slate-200">
                         <tr>
-                            <th className="px-6 py-3">Rank</th>
-                            <th className="px-6 py-3">Advisor</th>
-                            <th className="px-6 py-3 text-right">Meetings</th>
-                            <th className="px-6 py-3 text-right">M2 Conv %</th>
-                            <th className="px-6 py-3 text-right">DSC Contrib</th>
-                            <th className="px-6 py-3 text-right">Ref Collected</th>
+                            <th className="px-6 py-4 text-slate-600 font-semibold uppercase text-xs tracking-wider">Rank</th>
+                            <th className="px-6 py-4 text-slate-600 font-semibold uppercase text-xs tracking-wider">Advisor</th>
+                            <th className="px-6 py-4 text-slate-600 font-semibold uppercase text-xs tracking-wider text-right">Meetings</th>
+                            <th className="px-6 py-4 text-slate-600 font-semibold uppercase text-xs tracking-wider text-right">M2 Conv %</th>
+                            <th className="px-6 py-4 text-slate-600 font-semibold uppercase text-xs tracking-wider text-right">DSC Contrib</th>
+                            <th className="px-6 py-4 text-slate-600 font-semibold uppercase text-xs tracking-wider text-right">Ref Collected</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-800">
+                    <tbody className="divide-y divide-slate-100">
                         {sorted.map((adv, idx) => (
-                            <tr key={adv.name} className="hover:bg-zinc-800/20 transition-colors">
+                            <tr key={adv.name} className="hover:bg-slate-50 transition-colors">
                                 <td className="px-6 py-4">
-                                    <span className={clsx(
-                                        "w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold",
-                                        idx === 0 ? "bg-yellow-500/20 text-yellow-500" :
-                                            idx === 1 ? "bg-zinc-400/20 text-zinc-400" :
-                                                idx === 2 ? "bg-amber-700/20 text-amber-700" :
-                                                    "text-zinc-600"
-                                    )}>
-                                        {idx + 1}
-                                    </span>
+                                    {idx < 3 ? (
+                                        <div className={clsx(
+                                            "w-9 h-9 flex items-center justify-center rounded-full font-bold border-2",
+                                            idx === 0 ? "bg-gradient-to-br from-yellow-400 to-amber-500 text-white border-yellow-600 shadow-lg shadow-yellow-500/30" :
+                                                idx === 1 ? "bg-gradient-to-br from-slate-300 to-slate-400 text-white border-slate-500 shadow-lg shadow-slate-400/30" :
+                                                    "bg-gradient-to-br from-amber-600 to-amber-700 text-white border-amber-800 shadow-lg shadow-amber-600/30"
+                                        )}>
+                                            {idx === 0 && <Award className="w-5 h-5" />}
+                                            {idx > 0 && (idx + 1)}
+                                        </div>
+                                    ) : (
+                                        <span className="text-slate-500 font-medium">{idx + 1}</span>
+                                    )}
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
                                         <Avatar name={adv.name} size="sm" />
-                                        <span className="font-medium text-white">{adv.name}</span>
+                                        <span className="font-semibold text-slate-900">{adv.name}</span>
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 text-right text-zinc-200">{adv.meetingsCompleted}</td>
+                                <td className="px-6 py-4 text-right font-semibold text-slate-700">{adv.meetingsCompleted}</td>
                                 <td className="px-6 py-4 text-right">
                                     <span className={clsx(
-                                        adv.m2Conversion > 50 ? "text-emerald-400" : "text-zinc-400"
+                                        "px-2.5 py-1 rounded-full text-xs font-bold",
+                                        adv.m2Conversion > 50 ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"
                                     )}>
                                         {adv.m2Conversion}%
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-right text-indigo-400 font-medium">{adv.dscContribution.toFixed(1)}</td>
-                                <td className="px-6 py-4 text-right">{adv.referralsCollected}</td>
+                                <td className="px-6 py-4 text-right text-indigo-700 font-bold">{adv.dscContribution.toFixed(1)}</td>
+                                <td className="px-6 py-4 text-right font-semibold text-slate-700">{adv.referralsCollected}</td>
                             </tr>
                         ))}
                     </tbody>
